@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивный тест: Установка среды Python</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        python: {
+                            blue: '#306998',
+                            yellow: '#FFE873',
+                            darkblue: '#1e415e',
+                            gold: '#ffd43b',
+                            dark: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e415e 100%);
+        }
+        .card-blur {
+            backdrop-filter: blur(12px);
+            background: rgba(30, 41, 59, 0.7);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #306998;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-python-yellow selection:text-slate-900">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-brands fa-python text-3xl text-python-yellow"></i>
+                <span class="font-bold text-lg md:text-xl tracking-wide bg-gradient-to-r from-python-yellow to-sky-400 bg-clip-text text-transparent">Python Environment Test</span>
+            </div>
+            <div id="quiz-header-status" class="hidden text-sm font-medium text-slate-400">
+                Вопрос <span id="current-q-num" class="text-python-yellow font-bold">1</span> из <span id="total-q-num">20</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-3xl w-full">
+
+            <!-- WELCOME SCREEN -->
+            <div id="welcome-card" class="card-blur border border-slate-700/60 rounded-2xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-python-blue/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-python-yellow/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="text-center">
+                    <div class="inline-flex p-4 rounded-full bg-slate-800/80 border border-slate-700 mb-6 text-python-yellow">
+                        <i class="fa-solid fa-gears text-4xl"></i>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                        Проверка знаний: Установка и настройка среды Python
+                    </h1>
+                    <p class="text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
+                        Пройдите интерактивный тест из 20 вопросов, чтобы проверить свои знания по установке Python, настройке системных переменных, работе с виртуальными окружениями (venv) и менеджером пакетов pip.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-left">
+                        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 flex items-start space-x-3">
+                            <i class="fa-solid fa-list-check text-python-yellow mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-sm text-slate-200">20 вопросов</h3>
+                                <p class="text-xs text-slate-400">Охватывают все базовые темы настройки</p>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 flex items-start space-x-3">
+                            <i class="fa-solid fa-terminal text-sky-400 mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-sm text-slate-200">Практические темы</h3>
+                                <p class="text-xs text-slate-400">PATH, venv, pip, IDE, ОС</p>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 flex items-start space-x-3">
+                            <i class="fa-solid fa-lightbulb text-emerald-400 mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold text-sm text-slate-200">Разборы ответов</h3>
+                                <p class="text-xs text-slate-400">Подробные пояснения к каждому вопросу</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="start-btn" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-python-blue to-sky-600 hover:from-sky-600 hover:to-python-blue text-white font-bold rounded-xl shadow-lg hover:shadow-sky-500/25 transition duration-300 transform hover:-translate-y-0.5 active:translate-y-0">
+                        <i class="fa-solid fa-play mr-2"></i> Начать тестирование
+                    </button>
+                </div>
+            </div>
+
+            <!-- QUIZ CARD -->
+            <div id="quiz-card" class="hidden card-blur border border-slate-700/60 rounded-2xl p-6 md:p-8 shadow-2xl relative">
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden mb-6 border border-slate-700/50">
+                    <div id="progress-bar" class="bg-gradient-to-r from-python-blue to-python-yellow h-full w-0 transition-all duration-300"></div>
+                </div>
+
+                <!-- Question Header -->
+                <div class="mb-6">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-python-yellow uppercase tracking-wider mb-2">
+                        <span id="question-category" class="bg-python-blue/30 border border-python-blue/50 px-2.5 py-1 rounded-md">Тема</span>
+                    </div>
+                    <h2 id="question-text" class="text-xl md:text-2xl font-bold text-white leading-snug">
+                        Текст вопроса загружается...
+                    </h2>
+                </div>
+
+                <!-- Options -->
+                <div id="options-container" class="space-y-3 mb-6">
+                    <!-- Dynamic Options -->
+                </div>
+
+                <!-- Rationale Box (Hidden until answer chosen) -->
+                <div id="rationale-box" class="hidden mb-6 p-4 rounded-xl border transition-all duration-300">
+                    <div class="flex items-start space-x-3">
+                        <i id="rationale-icon" class="text-xl mt-0.5"></i>
+                        <div>
+                            <h4 id="rationale-title" class="font-bold text-sm mb-1">Пояснение</h4>
+                            <p id="rationale-text" class="text-sm text-slate-300 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-800">
+                    <button id="hint-btn" class="text-xs text-slate-400 hover:text-python-yellow flex items-center space-x-1 transition">
+                        <i class="fa-regular fa-lightbulb text-sm"></i>
+                        <span>Подсказка</span>
+                    </button>
+                    <button id="next-btn" disabled class="px-6 py-2.5 bg-slate-700 text-slate-400 cursor-not-allowed font-semibold rounded-lg transition duration-200 flex items-center space-x-2">
+                        <span>Следующий вопрос</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Hint display -->
+                <div id="hint-box" class="hidden mt-3 p-3 bg-amber-950/40 border border-amber-600/30 text-amber-200/90 text-xs rounded-lg">
+                    <i class="fa-solid fa-circle-info mr-1 text-amber-400"></i> <span id="hint-text"></span>
+                </div>
+            </div>
+
+            <!-- RESULTS SCREEN -->
+            <div id="result-card" class="hidden card-blur border border-slate-700/60 rounded-2xl p-6 md:p-10 shadow-2xl text-center">
+                <div id="score-badge" class="inline-flex p-5 rounded-full bg-slate-800/80 border border-slate-700 mb-6">
+                    <!-- Icon updated dynamically -->
+                </div>
+                <h2 class="text-3xl font-extrabold text-white mb-2">Тестирование завершено!</h2>
+                <p id="result-subtitle" class="text-slate-400 mb-6">Вот ваши результаты по настройке окружения Python</p>
+
+                <!-- Score statistics -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-xl">
+                        <span class="block text-slate-400 text-xs mb-1">Всего вопросов</span>
+                        <span class="text-2xl font-bold text-white">20</span>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-xl">
+                        <span class="block text-slate-400 text-xs mb-1">Правильно</span>
+                        <span id="score-correct" class="text-2xl font-bold text-emerald-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-xl">
+                        <span class="block text-slate-400 text-xs mb-1">Ошибок</span>
+                        <span id="score-incorrect" class="text-2xl font-bold text-rose-400">0</span>
+                    </div>
+                    <div class="bg-slate-800/60 border border-slate-700 p-4 rounded-xl">
+                        <span class="block text-slate-400 text-xs mb-1">Результат</span>
+                        <span id="score-percentage" class="text-2xl font-bold text-python-yellow">0%</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="restart-btn" class="px-6 py-3 bg-gradient-to-r from-python-blue to-sky-600 hover:from-sky-600 hover:to-python-blue text-white font-semibold rounded-xl transition shadow-lg">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Пройти заново
+                    </button>
+                    <button id="review-btn" class="px-6 py-3 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl transition">
+                        <i class="fa-solid fa-eye mr-2"></i> Посмотреть ошибки
+                    </button>
+                </div>
+
+                <!-- Review Section -->
+                <div id="review-container" class="hidden mt-8 text-left border-t border-slate-800 pt-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Детальный разбор всех вопросов</h3>
+                    <div id="review-list" class="space-y-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Dynamic Review Items -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/60 py-4 text-center text-xs text-slate-500">
+        Python Environment Setup Practice Quiz &copy; 2026
+    </footer>
+
+    <!-- Quiz Logic & Questions Script -->
+    <script>
+        const questionsData = [
+            {
+                questionNumber: 1,
+                category: "Официальный источник",
+                question: "Какой сайт является официальным источником для скачивания дистрибутива Python?",
+                answerOptions: [
+                    { text: "python.org", isCorrect: true, rationale: "Официальный сайт языка программирования Python — python.org, где размещаются официальные дистрибутивы, документация и новости." },
+                    { text: "python.com", isCorrect: false, rationale: "Домен python.com не является официальным сайтом разработки и распространения Python." },
+                    { text: "pypi.org", isCorrect: false, rationale: "pypi.org — это официальный репозиторий сторонних пакетов (Python Package Index), а не дистрибутива самого интерпретатора." },
+                    { text: "github.com/python", isCorrect: false, rationale: "Исходный код хранят на GitHub, но готовые установочные файлы для пользователей публикуются на python.org." }
+                ],
+                hint: "Ищите официальный некоммерческий домен органа Python Software Foundation."
+            },
+            {
+                questionNumber: 2,
+                category: "Переменные окружения",
+                question: "Какая галочка в инсталляторе Windows крайне важна при установке Python для упрощения запуска из командной строки?",
+                answerOptions: [
+                    { text: "Add python.exe to PATH", isCorrect: true, rationale: "Добавление `python.exe` в системную переменную PATH позволяет запускать Python и pip из любой директории командной строки." },
+                    { text: "Install for all users", isCorrect: false, rationale: "Эта опция устанавливает Python в общую системную папку, но сама по себе не регистрирует команды в терминале." },
+                    { text: "Precompile standard library", isCorrect: false, rationale: "Предварительная компиляция ускоряет первый запуск библиотек, но не влияет на видимость команды `python` в консоли." },
+                    { text: "Associate files with Python", isCorrect: false, rationale: "Связывание файлов позволяет открывать `.py` двойным кликом, но не добавляет системный путь в переменную PATH." }
+                ],
+                hint: "Эта опция связана с системными путями поиска исполняемых файлов."
+            },
+            {
+                questionNumber: 3,
+                category: "Терминал / Командная строка",
+                question: "Какая команда в терминале позволяет проверить установленную версию Python?",
+                answerOptions: [
+                    { text: "python --version", isCorrect: true, rationale: "Команда `python --version` (или `python -V`) выводит установленную версию интерпретатора." },
+                    { text: "python -getversion", isCorrect: false, rationale: "Флага `-getversion` в интерфейсе командной строки Python не существует." },
+                    { text: "python.ver()", isCorrect: false, rationale: "Это похожий на синтаксис вызов функции внутри кода Python, а не команда для терминала ОС." },
+                    { text: "pip version python", isCorrect: false, rationale: "Менеджер пакетов pip не используется для проверки версии самого интерпретатора Python." }
+                ],
+                hint: "Используйте стандартный флаг командной строки с двойным дефисом."
+            },
+            {
+                questionNumber: 4,
+                category: "Менеджер пакетов",
+                question: "Что представляет собой утилита pip в экосистеме Python?",
+                answerOptions: [
+                    { text: "Стандартный менеджер пакетов для установки сторонних библиотек", isCorrect: true, rationale: "pip (Pip Installs Packages) — это стандартный инструмент для поиска, загрузки и удаления сторонних пакетов из PyPI." },
+                    { text: "Интерпретатор байт-кода Python", isCorrect: false, rationale: "Интерпретатором является сама программа `python` (или `python3`), а не pip." },
+                    { text: "Виртуальная машина для запуска Python на Android", isCorrect: false, rationale: "pip не является виртуальной машиной для мобильных систем." },
+                    { text: "Редактор кода со встроенной отладкой", isCorrect: false, rationale: "pip — это консольная утилита управления зависимостями, а не среда разработки." }
+                ],
+                hint: "Аббревиатура расшифровывается как 'Pip Installs Packages'."
+            },
+            {
+                questionNumber: 5,
+                category: "Установка библиотек",
+                question: "С помощью какой команды можно установить библиотеку requests через pip?",
+                answerOptions: [
+                    { text: "pip install requests", isCorrect: true, rationale: "Команда `pip install <название_пакета>` скачивает и устанавливает указанный пакет из репозитория PyPI." },
+                    { text: "python install requests", isCorrect: false, rationale: "У самого интерпретатора `python` нет встроенной подкоманды `install`." },
+                    { text: "pip get requests", isCorrect: false, rationale: "Утилита pip использует ключевое слово `install`, а не `get`." },
+                    { text: "npm install requests", isCorrect: false, rationale: "`npm` — это менеджер пакетов для среды Node.js (JavaScript), а не Python." }
+                ],
+                hint: "Используйте стандартный глагол 'установить' на английском языке в сочетании с pip."
+            },
+            {
+                questionNumber: 6,
+                category: "Виртуальные окружения",
+                question: "Для чего в первую очередь применяются виртуальные окружения (virtual environments)?",
+                answerOptions: [
+                    { text: "Для изоляции зависимостей и версий библиотек конкретного проекта", isCorrect: true, rationale: "Виртуальное окружение позволяет создавать изолированные директории со своими версиями библиотек, избегая конфликтов между проектами." },
+                    { text: "Для ускорения выполнения кода на CPython", isCorrect: false, rationale: "Виртуальное окружение не изменяет механизм компиляции и скорость выполнения кода." },
+                    { text: "Для защиты операционной системы от вирусов в коде", isCorrect: false, rationale: "Виртуальное окружение — это не «песочница» безопасности (sandbox), оно изоляцию кода от ОС не обеспечивает." },
+                    { text: "Для автоматической трансляции кода Python в JavaScript", isCorrect: false, rationale: "Виртуальные окружения не предназначены для компиляции в другие языки программирования." }
+                ],
+                hint: "Главная цель — предотвратить конфликты между разной версией одного пакета в разных проектах."
+            },
+            {
+                questionNumber: 7,
+                category: "Встроенный модуль venv",
+                question: "Какая команда используется для создания нового виртуального окружения с именем myenv?",
+                answerOptions: [
+                    { text: "python -m venv myenv", isCorrect: true, rationale: "Модуль `venv` запускается через флаг `-m` утилиты python с указанием имени целевой папки (`python -m venv myenv`)." },
+                    { text: "pip create venv myenv", isCorrect: false, rationale: "Менеджер pip не отвечает за создание виртуальных окружений, за это отвечает модуль `venv` или `virtualenv`." },
+                    { text: "make environment myenv", isCorrect: false, rationale: "`make` — это сторонний утилитарный инструмент сборки проектов, а не команда создания окружений Python." },
+                    { text: "python new env myenv", isCorrect: false, rationale: "У Python нет такой комбинации флагов как `new env`." }
+                ],
+                hint: "Используйте запуск встроенного модуля через ключ `-m`."
+            },
+            {
+                questionNumber: 8,
+                category: "Активация venv (Windows)",
+                question: "Какой скрипт нужно выполнить для активации виртуального окружения myenv в командной строке Windows (cmd)?",
+                answerOptions: [
+                    { text: "myenv\\Scripts\\activate", isCorrect: true, rationale: "В Windows скрипт активации командной строки расположен по пути `имя_окружения\\Scripts\\activate`." },
+                    { text: "myenv/bin/activate", isCorrect: false, rationale: "Путь `bin/activate` используется в операционных системах Linux и macOS, но не в Windows." },
+                    { text: "python start myenv", isCorrect: false, rationale: "Активация выполняется запуском специальных скриптов, а не вызовом команды `python start`." },
+                    { text: "pip activate myenv", isCorrect: false, rationale: "Утилита pip не имеет команды `activate`." }
+                ],
+                hint: "В Windows исполняемые скрипты окружения хранятся в папке `Scripts` с обратными слэшами."
+            },
+            {
+                questionNumber: 9,
+                category: "Активация venv (Linux/macOS)",
+                question: "Какая команда активирует виртуальное окружение myenv в терминале Linux или macOS?",
+                answerOptions: [
+                    { text: "source myenv/bin/activate", isCorrect: true, rationale: "Команда `source myenv/bin/activate` считывает переменные окружения и активирует виртуальную среду в POSIX-системах." },
+                    { text: "start myenv\\Scripts\\activate", isCorrect: false, rationale: "Данный синтаксис применяется в операционной системе Windows." },
+                    { text: "python run myenv", isCorrect: false, rationale: "Команды `python run` не существует для активации venv." },
+                    { text: "pip3 enable myenv", isCorrect: false, rationale: "Менеджер пакетов pip3 не занимается включением или переключением окружений." }
+                ],
+                hint: "Используйте shell-команду `source` и прямые слэши в пути."
+            },
+            {
+                questionNumber: 10,
+                category: "Деактивация venv",
+                question: "Как деактивировать (выйти из) текущее виртуальное окружение в терминале?",
+                answerOptions: [
+                    { text: "deactivate", isCorrect: true, rationale: "Функция `deactivate`, добавляемая в сессию терминала при активации, возвращает пользователя к системному Python." },
+                    { text: "exit venv", isCorrect: false, rationale: "Команда `exit` обычно закрывает сам сеанс терминала, а не просто отключает окружение." },
+                    { text: "pip stop", isCorrect: false, rationale: "В pip отсутствует команда `stop`." },
+                    { text: "python --stop-env", isCorrect: false, rationale: "У интерпретатора нет флага `--stop-env`." }
+                ],
+                hint: "Простое односложное слово на английском, противоположное 'activate'."
+            },
+            {
+                questionNumber: 11,
+                category: "Управление зависимостями",
+                question: "Файл с каким стандартным именем принято использовать для сохранения списка зависимостей проекта?",
+                answerOptions: [
+                    { text: "requirements.txt", isCorrect: true, rationale: "Файл `requirements.txt` является общепринятым стандартом в Python-сообществе для фиксации версий зависимостей." },
+                    { text: "packages.json", isCorrect: false, rationale: "`package.json` — это стандартный файл конфигурации в экосистеме Node.js / JavaScript." },
+                    { text: "python-deps.xml", isCorrect: false, rationale: "XML-формат не используется по умолчанию для простого списка библиотек Python." },
+                    { text: "dependencies.config", isCorrect: false, rationale: "Хотя такое имя можно создать вручную, сообществом принят стандарт `requirements.txt`." }
+                ],
+                hint: "Название переводится как 'требования' в текстовом формате."
+            },
+            {
+                questionNumber: 12,
+                category: "Фиксация зависимостей",
+                question: "С помощью какой команды можно сохранить все установленные в окружении библиотеки в файл requirements.txt?",
+                answerOptions: [
+                    { text: "pip freeze > requirements.txt", isCorrect: true, rationale: "Команда `pip freeze` выводит список пакетов с их точными версиями, а оператор `>` перенаправляет этот вывод в файл." },
+                    { text: "python save requirements.txt", isCorrect: false, rationale: "У интерпретатора Python нет команды `save`." },
+                    { text: "pip export requirements.txt", isCorrect: false, rationale: "У pip нет подкоманды `export`, выгрузка формируется с помощью `freeze`." },
+                    { text: "pip list --save", isCorrect: false, rationale: "`pip list` показывает пакеты в виде таблицы, но не имеет флага `--save` для создания стандартного файла." }
+                ],
+                hint: "Команда буквально 'Замораживает' текущие версии пакетов."
+            },
+            {
+                questionNumber: 13,
+                category: "Пакетная установка",
+                question: "Как установить все зависимости, перечисленные в файле requirements.txt?",
+                answerOptions: [
+                    { text: "pip install -r requirements.txt", isCorrect: true, rationale: "Флаг `-r` (requirement) указывает утилите pip считывать список пакетов для установки из файла." },
+                    { text: "pip install requirements.txt", isCorrect: false, rationale: "Без флага `-r` pip попытается найти на PyPI пакет с буквальным названием 'requirements.txt'." },
+                    { text: "python load requirements.txt", isCorrect: false, rationale: "Интерпретатор python не имеет подкоманды `load`." },
+                    { text: "pip restore -f requirements.txt", isCorrect: false, rationale: "В pip не существует команды `restore`." }
+                ],
+                hint: "Не забудьте добавить ключ `-r` перед именем файла."
+            },
+            {
+                questionNumber: 14,
+                category: "Среды разработки (IDE)",
+                question: "Какая из перечисленных программ является специализированной полноценной IDE для Python от компании JetBrains?",
+                answerOptions: [
+                    { text: "PyCharm", isCorrect: true, rationale: "PyCharm — это одна из самых популярных специализированных IDE для языка Python, разработанная JetBrains." },
+                    { text: "Visual Studio Code", isCorrect: false, rationale: "VS Code — это универсальный редактор кода с поддержкой плагинов, а не специализированная IDE только для Python." },
+                    { text: "Sublime Text", isCorrect: false, rationale: "Sublime Text является легким текстовым редактором общего назначения." },
+                    { text: "Eclipse", isCorrect: false, rationale: "Eclipse изначально создавалась главным образом для разработки на языке Java." }
+                ],
+                hint: "Имя этой IDE содержит название языка и слово 'Charm'."
+            },
+            {
+                questionNumber: 15,
+                category: "Встроенная среда (IDLE)",
+                question: "Какая простая среда разработки поставляется сразу в комплекте с официальным дистрибутивом Python для Windows?",
+                answerOptions: [
+                    { text: "IDLE", isCorrect: true, rationale: "IDLE (Integrated Development and Learning Environment) поставляется по умолчанию вместе с инсталлятором Python." },
+                    { text: "Jupyter Notebook", isCorrect: false, rationale: "Jupyter Notebook требует отдельной установки через pip или сторонние дистрибутивы (Anaconda)." },
+                    { text: "Spyder", isCorrect: false, rationale: "Spyder — отдельная IDE для научных вычислений, не входящая в базовый дистрибутив." },
+                    { text: "Atom", isCorrect: false, rationale: "Atom — это сторонний редактор кода, разработка которого завершена." }
+                ],
+                hint: "Название названо в честь Эрика Айдла из комик-группы Монти Пайтон."
+            },
+            {
+                questionNumber: 16,
+                category: "Несколько версий Python",
+                question: "Какой официальный утилитный менеджер в Windows позволяет легко запускать нужную версию Python (например, 3.10 или 3.11)?",
+                answerOptions: [
+                    { text: "Лаунчер Python (команда py)", isCorrect: true, rationale: "Утилита `py.exe` (Python Launcher) позволяет выбирать версию через флаги, например `py -3.10 script.py`." },
+                    { text: "Команда winpython", isCorrect: false, rationale: "`WinPython` — это название стороннего портативного дистрибутива, а не встроенная команда Windows." },
+                    { text: "Утилита pip-version", isCorrect: false, rationale: "Утилиты с именем `pip-version` в системе нет." },
+                    { text: "Команда python-select", isCorrect: false, rationale: "Такая команда не является стандартным компонентом Windows." }
+                ],
+                hint: "Используйте короткую двубуквенную команду."
+            },
+            {
+                questionNumber: 17,
+                category: "Дистрибутивы Data Science",
+                question: "Как называется популярный дистрибутив Python, содержащий сразу набор библиотек для анализа данных и менеджер Conda?",
+                answerOptions: [
+                    { text: "Anaconda", isCorrect: true, rationale: "Anaconda — популярный дистрибутив для Data Science и машинного обучения, включающий Conda, Jupyter и сотни пакетов." },
+                    { text: "PyTorch", isCorrect: false, rationale: "PyTorch — это фреймворк глубокого обучения, а не полный дистрибутив языка." },
+                    { text: "CPython", isCorrect: false, rationale: "CPython — эталонная реализация интерпретатора языка Python на C, а не сборка с научными пакетами." },
+                    { text: "CyberPython", isCorrect: false, rationale: "Дистрибутива с таким названием не существует." }
+                ],
+                hint: "Назван в честь крупной тропической змеи."
+            },
+            {
+                questionNumber: 18,
+                category: "Репозиторий пакетов",
+                question: "Как называется официальный глобальный каталог и репозиторий сторонних пакетов Python?",
+                answerOptions: [
+                    { text: "PyPI (Python Package Index)", isCorrect: true, rationale: "PyPI (pypi.org) — это главный публичный репозиторий, откуда утилита pip скачивает библиотеки по умолчанию." },
+                    { text: "Python Hub", isCorrect: false, rationale: "Python Hub — незарегистрированное как официальный репозиторий название." },
+                    { text: "PyStore", isCorrect: false, rationale: "Официальный магазин/каталог пакетов называется PyPI." },
+                    { text: "CRAN", isCorrect: false, rationale: "CRAN — это главный репозиторий пакетов для языка программирования R." }
+                ],
+                hint: "Аббревиатура расшифровывается как 'Python Package Index'."
+            },
+            {
+                questionNumber: 19,
+                category: "Настройка VS Code",
+                question: "Что необходимо обязательно установить внутри VS Code для полноценной работы с кодом Python (подсветка, автодополнение, отладка)?",
+                answerOptions: [
+                    { text: "Расширение Python (от Microsoft)", isCorrect: true, rationale: "Официальное расширение Python добавляет в VS Code поддержку автодополнения (IntelliSense), отладки и выбора интерпретатора." },
+                    { text: "Плагин Java Development Kit", isCorrect: false, rationale: "JDK нужен для работы с языком Java, для Python он не требуется." },
+                    { text: "Базу данных SQLite", isCorrect: false, rationale: "База данных не нужна для работы среды разработки или редактора с кодом Python." },
+                    { text: "Плагин Docker Desktop", isCorrect: false, rationale: "Docker используется для контейнеризации приложений, но не обязателен для базового написания кода." }
+                ],
+                hint: "Ищите официальный плагин в каталоге Extensions от создателей редактора."
+            },
+            {
+                questionNumber: 20,
+                category: "Обновление pip",
+                question: "Какая команда рекомендуется для безопасного обновления самого менеджера пакетов pip до последней версии?",
+                answerOptions: [
+                    { text: "python -m pip install --upgrade pip", isCorrect: true, rationale: "Запуск через `python -m pip` гарантирует, что модуль pip обновится корректно без блокировки исполняемого файла в ОС." },
+                    { text: "pip update self", isCorrect: false, rationale: "Утилита pip не имеет команды `update self`." },
+                    { text: "pip download --new-pip", isCorrect: false, rationale: "Такого флага у pip не существует." },
+                    { text: "install-latest-pip", isCorrect: false, rationale: "Это не системная команда Python." }
+                ],
+                hint: "Используйте модуль python с флагом `--upgrade`."
+            }
+        ];
+
+        // State variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        // DOM elements
+        const welcomeCard = document.getElementById('welcome-card');
+        const quizCard = document.getElementById('quiz-card');
+        const resultCard = document.getElementById('result-card');
+        
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const hintBtn = document.getElementById('hint-btn');
+
+        const quizHeaderStatus = document.getElementById('quiz-header-status');
+        const currentQNum = document.getElementById('current-q-num');
+        const totalQNum = document.getElementById('total-q-num');
+        const progressBar = document.getElementById('progress-bar');
+
+        const questionCategory = document.getElementById('question-category');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+
+        const rationaleBox = document.getElementById('rationale-box');
+        const rationaleIcon = document.getElementById('rationale-icon');
+        const rationaleTitle = document.getElementById('rationale-title');
+        const rationaleText = document.getElementById('rationale-text');
+
+        const hintBox = document.getElementById('hint-box');
+        const hintText = document.getElementById('hint-text');
+
+        const scoreCorrect = document.getElementById('score-correct');
+        const scoreIncorrect = document.getElementById('score-incorrect');
+        const scorePercentage = document.getElementById('score-percentage');
+        const scoreBadge = document.getElementById('score-badge');
+        const reviewContainer = document.getElementById('review-container');
+        const reviewList = document.getElementById('review-list');
+
+        // Init App
+        totalQNum.textContent = questionsData.length;
+
+        startBtn.addEventListener('click', startQuiz);
+        nextBtn.addEventListener('click', handleNextQuestion);
+        restartBtn.addEventListener('click', startQuiz);
+        reviewBtn.addEventListener('click', toggleReview);
+        hintBtn.addEventListener('click', toggleHint);
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+
+            welcomeCard.classList.add('hidden');
+            resultCard.classList.add('hidden');
+            reviewContainer.classList.add('hidden');
+            quizCard.classList.remove('hidden');
+            quizHeaderStatus.classList.remove('hidden');
+
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questionsData[currentQuestionIndex];
+
+            // Reset UI
+            nextBtn.disabled = true;
+            nextBtn.className = "px-6 py-2.5 bg-slate-700 text-slate-500 cursor-not-allowed font-semibold rounded-lg transition duration-200 flex items-center space-x-2";
+            rationaleBox.classList.add('hidden');
+            hintBox.classList.add('hidden');
+
+            // Header status
+            currentQNum.textContent = currentQuestionIndex + 1;
+            const progressPercent = ((currentQuestionIndex) / questionsData.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+
+            // Question content
+            questionCategory.textContent = q.category || "Общие знания";
+            questionText.textContent = q.question;
+            hintText.textContent = q.hint;
+
+            // Options
+            optionsContainer.innerHTML = '';
+            q.answerOptions.forEach((option, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full text-left p-4 rounded-xl border border-slate-700/70 bg-slate-800/40 hover:bg-slate-800 hover:border-slate-600 transition-all duration-200 flex items-center justify-between group";
+                btn.onclick = () => selectOption(idx);
+
+                btn.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-lg border border-slate-600 bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:border-python-yellow group-hover:text-python-yellow transition">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        <span class="font-mono text-sm text-slate-200">${escapeHtml(option.text)}</span>
+                    </div>
+                    <i class="fa-regular fa-circle text-slate-600 group-hover:text-slate-400 transition"></i>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex) {
+            // Disable all option buttons
+            const optionBtns = optionsContainer.querySelectorAll('button');
+            optionBtns.forEach(btn => btn.onclick = null);
+
+            const q = questionsData[currentQuestionIndex];
+            const selectedOption = q.answerOptions[selectedIndex];
+            const isCorrect = selectedOption.isCorrect;
+
+            if (isCorrect) {
+                score++;
+            }
+
+            userAnswers.push({
+                questionIndex: currentQuestionIndex,
+                selectedIndex: selectedIndex,
+                isCorrect: isCorrect
+            });
+
+            // Highlight buttons
+            optionBtns.forEach((btn, idx) => {
+                const opt = q.answerOptions[idx];
+                if (opt.isCorrect) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500/80 bg-emerald-950/30 text-white flex items-center justify-between";
+                    btn.querySelector('i').className = "fa-solid fa-circle-check text-emerald-400 text-lg";
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500/80 bg-rose-950/30 text-white flex items-center justify-between";
+                    btn.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-400 text-lg";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-900/40 text-slate-500 opacity-60 flex items-center justify-between";
+                }
+            });
+
+            // Show rationale
+            rationaleBox.classList.remove('hidden');
+            if (isCorrect) {
+                rationaleBox.className = "mb-6 p-4 rounded-xl border border-emerald-500/40 bg-emerald-950/20 text-emerald-200";
+                rationaleIcon.className = "fa-solid fa-circle-check text-emerald-400";
+                rationaleTitle.textContent = "Правильно!";
+                rationaleTitle.className = "font-bold text-sm text-emerald-400 mb-1";
+            } else {
+                rationaleBox.className = "mb-6 p-4 rounded-xl border border-rose-500/40 bg-rose-950/20 text-rose-200";
+                rationaleIcon.className = "fa-solid fa-circle-xmark text-rose-400";
+                rationaleTitle.textContent = "Неверно!";
+                rationaleTitle.className = "font-bold text-sm text-rose-400 mb-1";
+            }
+            rationaleText.textContent = selectedOption.rationale;
+
+            // Enable Next Button
+            nextBtn.disabled = false;
+            nextBtn.className = "px-6 py-2.5 bg-gradient-to-r from-python-blue to-sky-600 hover:from-sky-600 hover:to-python-blue text-white font-semibold rounded-lg transition duration-200 flex items-center space-x-2 shadow-lg cursor-pointer";
+        }
+
+        function handleNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function toggleHint() {
+            hintBox.classList.toggle('hidden');
+        }
+
+        function showResults() {
+            quizCard.classList.add('hidden');
+            quizHeaderStatus.classList.add('hidden');
+            resultCard.classList.remove('hidden');
+
+            const total = questionsData.length;
+            const percentage = Math.round((score / total) * 100);
+
+            scoreCorrect.textContent = score;
+            scoreIncorrect.textContent = total - score;
+            scorePercentage.textContent = `${percentage}%`;
+
+            // Badge & feedback
+            if (percentage >= 85) {
+                scoreBadge.innerHTML = `<i class="fa-solid fa-award text-5xl text-python-yellow"></i>`;
+                document.getElementById('result-subtitle').textContent = "Отлично! Вы прекрасно разбираетесь в настройке среды Python!";
+            } else if (percentage >= 60) {
+                scoreBadge.innerHTML = `<i class="fa-solid fa-thumbs-up text-5xl text-sky-400"></i>`;
+                document.getElementById('result-subtitle').textContent = "Хороший результат! Но есть незначительные пробелы.";
+            } else {
+                scoreBadge.innerHTML = `<i class="fa-solid fa-book-open text-5xl text-rose-400"></i>`;
+                document.getElementById('result-subtitle').textContent = "Стоит освежить в памяти основные темы установки и venv.";
+            }
+
+            renderReviewList();
+        }
+
+        function renderReviewList() {
+            reviewList.innerHTML = '';
+            userAnswers.forEach((ans, idx) => {
+                const q = questionsData[ans.questionIndex];
+                const selectedOpt = q.answerOptions[ans.selectedIndex];
+                const correctOpt = q.answerOptions.find(o => o.isCorrect);
+
+                const item = document.createElement('div');
+                item.className = `p-4 rounded-xl border ${ans.isCorrect ? 'border-emerald-500/30 bg-emerald-950/10' : 'border-rose-500/30 bg-rose-950/10'}`;
+
+                item.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <span class="text-xs font-bold ${ans.isCorrect ? 'text-emerald-400' : 'text-rose-400'} uppercase">
+                            Вопрос ${idx + 1}: ${ans.isCorrect ? 'Правильно' : 'Ошибка'}
+                        </span>
+                        <span class="text-xs text-slate-400">${q.category}</span>
+                    </div>
+                    <p class="font-semibold text-slate-200 text-sm mb-2">${q.question}</p>
+                    <div class="text-xs space-y-1 mb-2">
+                        <div class="text-slate-300">
+                            <span class="text-slate-400">Ваш ответ:</span> 
+                            <span class="${ans.isCorrect ? 'text-emerald-300 font-mono' : 'text-rose-300 font-mono'}">${escapeHtml(selectedOpt.text)}</span>
+                        </div>
+                        ${!ans.isCorrect ? `
+                            <div class="text-slate-300">
+                                <span class="text-slate-400">Правильный ответ:</span> 
+                                <span class="text-emerald-300 font-mono">${escapeHtml(correctOpt.text)}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <p class="text-xs text-slate-400 border-t border-slate-800 pt-2 mt-2">
+                        <i class="fa-solid fa-info-circle mr-1"></i> ${selectedOpt.rationale}
+                    </p>
+                `;
+                reviewList.appendChild(item);
+            });
+        }
+
+        function toggleReview() {
+            reviewContainer.classList.toggle('hidden');
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
